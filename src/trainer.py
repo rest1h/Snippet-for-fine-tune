@@ -12,8 +12,8 @@ from utils import get_params_to_update
 
 class Trainer(object):
     def __init__(self, finetuner):
-        self._finetuner = finetuner
         self._model = finetuner.model
+        self.feature_extract = finetuner.feature_extract
 
     def fit(
         self,
@@ -28,7 +28,7 @@ class Trainer(object):
 
         self._model = self._model.to(device)
         params_to_update = get_params_to_update(
-            self._model, self._finetuner.feature_extract
+            self._model, self.feature_extract
         )
 
         optimizer = optimizer(params_to_update, lr=lr)
@@ -140,5 +140,5 @@ class Trainer(object):
         return self._model
 
     @model.setter
-    def model(self, value):
-        self._model = value
+    def model(self, model):
+        self._model = model
