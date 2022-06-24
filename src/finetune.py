@@ -1,6 +1,6 @@
 import copy
 import time
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Type
 
 import torch
 from torch import nn, optim
@@ -54,11 +54,11 @@ class Resnet18Finetuner:
 
     def fit(
         self,
-        dataloaders: Dict[str:DataLoader],
+        dataloaders: Dict[Type[str], Type[DataLoader]],
         num_epochs: int = 25,
         lr: float = 0.001,
         is_inception: bool = False,
-    ) -> [resnet18, Tuple[List, List, List]]:
+    ) -> Tuple[resnet18, Tuple[List[float], List, List[float], list]]:
         self._model = self._model.to(self.device)
         params_to_update = get_params_to_update(self._model, self.feature_extract)
 
