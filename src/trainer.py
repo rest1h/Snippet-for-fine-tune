@@ -106,10 +106,10 @@ class Trainer(object):
 
                 if phase == "train":
                     train_loss_history.append(epoch_loss)
-                    train_acc_history.append(epoch_acc)
+                    train_acc_history.append(epoch_acc.cpu().numpy())
                 elif phase == "test":
                     test_loss_history.append(epoch_loss)
-                    test_acc_history.append(epoch_acc)
+                    test_acc_history.append(epoch_acc.cpu().numpy())
                 # deep copy the model
                 if phase == "test" and epoch_acc > best_acc:
                     best_acc = epoch_acc
