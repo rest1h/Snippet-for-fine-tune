@@ -1,48 +1,26 @@
 import os
-from typing import Dict
+from typing import Dict, Type
 
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
 
 def load_augmented_data(input_size, batch_size, data_dir) \
-        -> Dict[str:DataLoader]:
+        -> Dict[Type[str], Type[DataLoader]]:
     # Data augmentation and normalization for training
     # Just normalization for validation
     data_transforms = {
-        "train": transforms.Compose(
-            [
-                transforms.RandomResizedCrop(input_size),
-                transforms.RandomHorizontalFlip(p=0.5),
-                transforms.RandomVerticalFlip(p=0.5),
-                transforms.RandomRotation(0.2),
-                transforms.ColorJitter(
-                    brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5
-                ),
-                transforms.RandomSolarize(threshold=128),
-                transforms.RandomGrayscale(p=0.1),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406],
-                                     [0.229, 0.224, 0.225]),
-            ]
-        ),
-        "test": transforms.Compose(
-            [
-                transforms.Resize(input_size),
-                transforms.CenterCrop(input_size),
-                transforms.RandomHorizontalFlip(p=0.5),
-                transforms.RandomVerticalFlip(p=0.5),
-                transforms.RandomRotation(0.2),
-                transforms.ColorJitter(
-                    brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5
-                ),
-                transforms.RandomSolarize(threshold=128),
-                transforms.RandomGrayscale(p=0.1),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406],
-                                     [0.229, 0.224, 0.225]),
-            ]
-        ),
+        'train': transforms.Compose([
+            transforms.RandomResizedCrop(input_size),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ]),
+        'test': transforms.Compose([
+            transforms.Resize(input_size),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ]),
     }
 
     print("Initializing Datasets and Dataloaders...")
