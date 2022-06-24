@@ -1,26 +1,31 @@
 import os
-from typing import Dict, Type
+from typing import Dict, Iterable
 
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
 
-def load_augmented_data(input_size, batch_size, data_dir) \
-        -> Dict[Type[str], Type[DataLoader]]:
+def load_augmented_data(
+    input_size, batch_size, data_dir, num_workers
+) -> Dict[str, Iterable[DataLoader]]:
     # Data augmentation and normalization for training
     # Just normalization for validation
     data_transforms = {
-        'train': transforms.Compose([
-            transforms.RandomResizedCrop(input_size),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
-        'test': transforms.Compose([
-            transforms.Resize(input_size),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
+        "train": transforms.Compose(
+            [
+                transforms.RandomResizedCrop(input_size),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+            ]
+        ),
+        "test": transforms.Compose(
+            [
+                transforms.Resize(input_size),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+            ]
+        ),
     }
 
     print("Initializing Datasets and Dataloaders...")
@@ -37,7 +42,7 @@ def load_augmented_data(input_size, batch_size, data_dir) \
             image_datasets[x],
             batch_size=batch_size,
             shuffle=True,
-            num_workers=4
+            num_workers=num_workers,
         )
         for x in ["train", "test"]
     }
