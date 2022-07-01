@@ -18,9 +18,6 @@ class Resnet18Finetuner(object):
         self._feature_extract = feature_extract
         set_parameter_requires_grad(self._model, feature_extract)
 
-        # Add final layers to train the target data.
-        self.add_final_layers()
-
     def add_final_layers(self) -> None:
         # Add final layers to train the target data.
         self._model.fc = nn.Linear(self._model.fc.in_features, 100)
